@@ -19,7 +19,7 @@ router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const item = await service.get(id);
-    res.json(item);
+    res.json({ status: 'success', data: item });
   } catch (error) {
     next(error);
   }
@@ -29,7 +29,7 @@ router.post('/', validator(create, 'body'), async (req, res, next) => {
   try {
     const { body } = req;
     const item = await service.create(body);
-    res.json(item);
+    res.status(201).json({ status: 'created', data: item });
   } catch (error) {
     res.json(error);
   }
@@ -40,7 +40,7 @@ router.patch('/:id', async (req, res, next) => {
     const { id } = req.params;
     const { body } = req;
     const item = await service.update(id, body);
-    res.json(item);
+    res.json({ status: 'updated', data: item });
   } catch (error) {
     next(error);
   }
@@ -50,7 +50,7 @@ router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const item = await service.delete(id);
-    res.json(item);
+    res.json({ status: 'deleted', data: item });
   } catch (error) {
     next(error);
   }

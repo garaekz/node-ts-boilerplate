@@ -1,28 +1,39 @@
+import { notFound } from '@hapi/boom';
+import { Item } from './../models/item.model';
 
 export class ItemsService {
   constructor() {}
 
   async all() {
-    return [
-      { id: 1, name: 'Item 1' },
-      { id: 2, name: 'Item 2' },
-      { id: 3, name: 'Item 3' },
-    ];
+    return Item.find();
   }
 
   async get(id: String) {
-    return { id, name: 'Item ' + id };
-  }
-
-  async create(item: any) {
+    const item = await Item.findById(id);
+    if (!item) {
+      throw notFound(`Item with ID ${id} not found`);
+    }
     return item;
   }
 
-  async update(id: String, item: any) {
+  async create(data: any) {
+    return Item.create(data);
+  }
+
+  async update(id: String, data: any) {
+    const item = await Item.findByIdAndUpdate(id, data, { new: true });
+    if (!item) {
+      throw notFound(`Item with ID ${id} not found`);
+    }
+      
     return item;
   }
 
   async delete(id: String) {
-    return id;
+    const item = await Item.findByIdAndDelete(id);
+    if (!item) {
+      throw notFound(`Item with ID ${id} not found`);
+    }
+    return item;
   }
 }
